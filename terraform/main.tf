@@ -2,8 +2,14 @@ provider "aws" {
   region = "ap-south-1"
 }
 
+# Generate a random suffix to avoid security group name conflicts
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
+# Security Group for Node.js API
 resource "aws_security_group" "node_sg" {
-  name = "node-api-sg"
+  name = "node-api-sg-${random_id.suffix.hex}"
 
   ingress {
     from_port   = 6382
@@ -20,10 +26,11 @@ resource "aws_security_group" "node_sg" {
   }
 }
 
+# EC2 Instance running Node.js backend (Windows)
 resource "aws_instance" "node_backend" {
-  ami                    = "ami-036940a1a7418c22f" # ✅ Windows Server 2019 in ap-south-1
+  ami                    = "ami-036940a1a7418c22f" # Windows Server 2019 in ap-south-1
   instance_type          = "t3.medium"
-  key_name               = "Outdid2025"
+  key_name               = "Outdid2025" # Replace with your actual key name
   vpc_security_group_ids = [aws_security_group.node_sg.id]
 
   user_data = <<-EOF
