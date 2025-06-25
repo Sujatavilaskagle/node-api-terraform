@@ -23,7 +23,7 @@ resource "aws_security_group" "node_sg" {
 resource "aws_instance" "node_backend" {
   ami                    = "ami-036940a1a7418c22f" # ✅ Windows Server 2019 in ap-south-1
   instance_type          = "t3.medium"
-  key_name               = "your-key-name"
+  key_name               = "Outdid2025"
   vpc_security_group_ids = [aws_security_group.node_sg.id]
 
   user_data = <<-EOF
